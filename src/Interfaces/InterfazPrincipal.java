@@ -3,29 +3,33 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package produccioniii_mrp;
+package Interfaces;
 
 import Pojo.Usuario_Conectado;
 import Validaciones.ImagenFondoDesktop;
 import com.javaswingcomponents.accordion.JSCAccordion;
 import com.javaswingcomponents.accordion.TabOrientation;
-import com.sun.org.apache.xalan.internal.lib.ExsltDatetime;
+import static Implementaciones.Metodos.Centrar;
+import static Implementaciones.Metodos.Maximizar;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
+import java.beans.PropertyVetoException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.swing.BoxLayout;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import org.jb2011.lnf.beautyeye.BeautyEyeLookAndFeelCross;
 
 /**
  *
@@ -46,30 +50,56 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     JButton btnVisualizarProveedores = new JButton();
     JButton btnInformacionGeneral = new JButton();
     JButton btnSalir = new JButton();
-    
-    public final void RellenarPaneles(){
+
+    private boolean internalActivo(Object object) {
+        JInternalFrame[] activos = this.Escritorio.getAllFrames();
+        boolean mostrar = true;
+        for (int a = 0; a < Escritorio.getComponentCount(); a++) {
+            if (object.getClass().isInstance(Escritorio.getComponent(a))) {
+                mostrar = false;
+            }
+        }
+        return mostrar;
+    }
+
+    public final void RellenarPaneles() {
         //AGREGACION DE BORDERLAYOUT A LOS PANELES
         panelMateriales.setLayout(new GridLayout(4, 1));
-        panelProveedores.setLayout(new GridLayout(3,1));
-        panelInformacionGeneral.setLayout(new GridLayout(2,1));
-        
+        panelProveedores.setLayout(new GridLayout(3, 1));
+        panelInformacionGeneral.setLayout(new GridLayout(2, 1));
+
         btnGestionarMateriales.setText("Administrar Materiales");
         btnArbolMaterial.setText("Arbol de Materiales");
         btnVisualizarMateriales_Composicion.setText("Visualizar Composicion Mat.");
         btnGestionarProveedores.setText("Administrar Proveedores");
         btnVisualizarProveedores.setText("Visualizar Proveedores");
         btnInformacionGeneral.setText("Datos de Desarrolladores");
-        
+
+        btnGestionarMateriales.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Interfaz_GestionMateriales a = new Interfaz_GestionMateriales();
+                if (internalActivo(a)) {
+                    Centrar(a, Escritorio);
+                    try {
+                        Maximizar(a);
+                    } catch (PropertyVetoException ex) {
+                        Logger.getLogger(InterfazPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+
         panelMateriales.add(btnGestionarMateriales);
         panelMateriales.add(btnArbolMaterial);
         panelMateriales.add(btnVisualizarMateriales_Composicion);
-        
+
         panelProveedores.add(btnGestionarProveedores);
         panelProveedores.add(btnVisualizarProveedores);
-        
+
         panelInformacionGeneral.add(btnInformacionGeneral);
     }
-    
+
     public InterfazPrincipal() {
         initComponents();
         setLocationRelativeTo(null);
@@ -79,17 +109,17 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         this.jPanel3.setLayout(new BorderLayout());
         this.jPanel3.add(MenuAcordion(), BorderLayout.CENTER);
         this.jPanel3.add(AgregarBotonSalir(), BorderLayout.PAGE_END);
-        this.jDesktopPane1.setBorder(new ImagenFondoDesktop());
+        this.Escritorio.setBorder(new ImagenFondoDesktop());
         this.add(BarraEstado);
     }
-    
+
     private Component MenuAcordion() {
         accordion.setTabOrientation(TabOrientation.VERTICAL);
         agregarTabsProduccion(accordion);
         add(accordion);
         return accordion;
     }
-    
+
     private void agregarTabsProduccion(JSCAccordion accordion) {
         panelMateriales.setOpaque(true);
         panelMateriales.setBackground(Color.CYAN);
@@ -102,11 +132,11 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         accordion.addTab("Administracion de Proveedores", panelProveedores);
         accordion.addTab("Informacion del Sistema", panelInformacionGeneral);
     }
-    
-    public void CerrarMDI(){
+
+    public void CerrarMDI() {
         System.exit(0);
     }
-    
+
     private Component AgregarBotonSalir() {
         btnSalir.setText("Salir del Sistema");
         btnSalir.addActionListener(new ActionListener() {
@@ -136,7 +166,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         Fecha = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        jDesktopPane1 = new javax.swing.JDesktopPane();
+        Escritorio = new javax.swing.JDesktopPane();
 
         BarraEstado.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
@@ -185,23 +215,23 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 703, Short.MAX_VALUE)
+            .addGap(0, 510, Short.MAX_VALUE)
         );
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.LINE_START);
 
-        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
-        jDesktopPane1.setLayout(jDesktopPane1Layout);
-        jDesktopPane1Layout.setHorizontalGroup(
-            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1050, Short.MAX_VALUE)
+        javax.swing.GroupLayout EscritorioLayout = new javax.swing.GroupLayout(Escritorio);
+        Escritorio.setLayout(EscritorioLayout);
+        EscritorioLayout.setHorizontalGroup(
+            EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 780, Short.MAX_VALUE)
         );
-        jDesktopPane1Layout.setVerticalGroup(
-            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 707, Short.MAX_VALUE)
+        EscritorioLayout.setVerticalGroup(
+            EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 514, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jDesktopPane1, java.awt.BorderLayout.CENTER);
+        jPanel1.add(Escritorio, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(jPanel1);
 
@@ -223,19 +253,8 @@ public class InterfazPrincipal extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InterfazPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InterfazPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InterfazPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            UIManager.setLookAndFeel(new BeautyEyeLookAndFeelCross());
+        } catch (Exception ex) {
             java.util.logging.Logger.getLogger(InterfazPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
@@ -247,7 +266,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
             }
         });
     }
-    
+
     class Hora extends Thread {
 
         public void run() {
@@ -270,9 +289,9 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel BarraEstado;
+    private javax.swing.JDesktopPane Escritorio;
     private javax.swing.JLabel Fecha;
     private javax.swing.JLabel Usuario;
-    private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     // End of variables declaration//GEN-END:variables
