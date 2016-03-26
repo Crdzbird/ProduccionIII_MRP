@@ -4,16 +4,42 @@ Create Database SistemaMRP;
 
 Use SistemaMRP;
 
+/*Se supone que los materiales pueden estar compuestos por mas de 1, y que segun jeeson eso se debe componer xd */
+/* si ya entendi calma con eso dejame pensar*/
+
+-- mat , cant, tiempo | Mat, cant, tiempo
+-- table Mat ( nombre, cantidad inventario, tiempo, tam_lote, )
+-- table dependencia(idMatPrincipal, IdMat, Cantidad_M)(ya podes esrc
+-- una duda, la tabla de dependencia ya esta, peeero no seria mejor ponerle un estado a esa misma tabla, para saber si 
+-- todavia se utiliza, o si se puede reemplazar por algun otro material?, mmm (/*-*)/ \(*-*\), estoy viendo si el estado le corresponde a la tabla de material o la tabla de dependencia
+-- es que la tabla materiales esta bien que se ponga el estado, para verificar si todavia esta vigente su utilizacion, pero si nos ponemos en la dependencia no se si seria buena idea,
+-- creo que la misma tabla principal ya valida eso.accessible
+-- yo se, que te refieres a eso, pero creo que las dostablas llevarian estado una
+-- porsi ese material no se va utilizar en ningun otro producto
+-- pero que tal si y, te voy a chat por messenger mucho se pega, dale descuida
+-- esta lento este internet xd
+-- a que te refieres exactamente con eso de desactivar estados?
+
 Create Table Materiales(
 	id_material int primary key auto_increment not null,
-	id_material_componente int,
+-- 	id_material_componente int,
 	nombre_material varchar(250)not null,
 	tiempo_espera varchar(50)not null,
 	cantidad_lote int not null,
-	cantidad_componente int,
+-- 	cantidad_componente int,
 	cantidad_material int not null,
-	estado_material boolean default true,
-	foreign key(id_material_componente)references Materiales(id_material)
+	estado_material boolean default true
+-- 	foreign key(id_material_componente)references Materiales(id_material)
+);
+
+Create Table Materiales_Dependencias(
+	id_materiales_dependencia int primary key auto_increment not null,
+	id_material_principal int  not null,
+	id_material_dependencia int not null,
+	cantidad_material_dependencia int not null,
+	estado_material_principal boolean not null default true,
+	foreign key(id_material_principal)references Materiales(id_material),
+	foreign key(id_material_dependencia)references Materiales(id_material)
 );
 
 Create Table Proveedor(
@@ -21,6 +47,7 @@ Create Table Proveedor(
 	nombre_proveedor varchar(250)not null,
 	estado_proveedor boolean default true
 );
+
 
 Create Table Estado_Envio(
 	id_estado_envio int primary key auto_increment not null,
@@ -36,11 +63,11 @@ Create Table Estado_Envio(
 /* DESARROLLO DE FUNCIONES DE VERIFICACION DE MATERIALES Y FECHA */
 
 DELIMITER //
-CREATE FUNCTION Campos_Materiales_Vacio(id_material_componente int,nombre_material varchar(50),tiempo_espera varchar(50),cantidad_lote int,cantidad_componente int,cantidad_material int)RETURNS INT
+CREATE FUNCTION Campos_Materiales_Vacio(nombre_material varchar(50),tiempo_espera varchar(50),cantidad_lote int,cantidad_material int)RETURNS INT
 BEGIN
 DECLARE vd int;
-IF((id_material_componente IS NULL or id_material_componente = '') or (tiempo_espera IS NULL or tiempo_espera = '') or (nombre_material IS NULL or nombre_material = '') or (cantidad_lote IS NULL or cantidad_lote = '') 
-or (cantidad_componente IS NULL or cantidad_componente = '') or (cantidad_material IS NULL or cantidad_material = ''))then
+IF((tiempo_espera IS NULL or tiempo_espera = '') or (nombre_material IS NULL or nombre_material = '') or (cantidad_lote IS NULL or cantidad_lote = '') 
+or (cantidad_material IS NULL or cantidad_material = ''))then
 set vd = 0;
 else
 set vd = 1;
@@ -91,20 +118,29 @@ End //
 
 
 /* DESARROLLO DE PROCEDIMIENTOS DE ALMACENADO */
+/*id_material int primary key auto_increment not null,
+-- 	id_material_componente int,
+	nombre_material varchar(250)not null,
+	tiempo_espera varchar(50)not null,
+	cantidad_lote int not null,
+-- 	cantidad_componente int,
+	cantidad_material int not null,
+	estado_material boolean default true*/
+
 
 DELIMITER //
 Create Procedure Registrar_Material(
-id_material_componente int,nombre_material varchar(250),tiempo_espera varchar(50),cantidad_lote int,cantidad_componente int,
+nombre_material varchar(250),tiempo_espera varchar(50),cantidad_lote int,
 cantidad_material int,estado_material boolean)
 Begin
 DECLARE EXIT HANDLER FOR SQLEXCEPTION ROLLBACK;
 DECLARE EXIT HANDLER FOR SQLWARNING ROLLBACK;
 Start Transaction;
 
-IF((Campos_Materiales_Vacio(id_material_componente,nombre_material,tiempo_espera,cantidad_lote,cantidad_componente,cantidad_material)=1))
+IF((Campos_Materiales_Vacio(nombre_material,tiempo_espera,cantidad_lote,cantidad_material)=1))
  THEN
-	insert into Materiales(nombre_material,tiempo_espera,cantidad_lote,cantidad_componente,cantidad_material,estado)
-    values(nombre_material,tiempo_espera,cantidad_lote,cantidad_componente,cantidad_material,estado_material);
+	insert into Materiales(nombre_material,tiempo_espera,cantidad_lote,cantidad_material,estado)
+    values(nombre_material,tiempo_espera,cantidad_lote,cantidad_material,estado_material);
 	Commit;
 else
 call raise_error;

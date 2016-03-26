@@ -5,17 +5,46 @@
  */
 package Interfaces;
 
+import Conexion.Conexion;
+import Implementaciones.GhostText;
+import Implementaciones.PanelSlider;
+import Pojo.Materiales;
+import java.awt.Insets;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.util.Enumeration;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 /**
  *
  * @author crdzbird
  */
 public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form Interfaz_GestionMateriales
-     */
+    //final PanelSlider<JPanel> slider;
     public Interfaz_GestionMateriales() {
         initComponents();
+        this.txtTiempoEspera.setTransferHandler(null);
+        this.txtCantidadEstimada.setTransferHandler(null);
+        this.txtTiempoEspera.setTransferHandler(null);
+        this.txtNombreMaterial.setTransferHandler(null);
+        this.txtTotalMateriales.setEditable(false);
+//        slider = new PanelSlider<>(this.panelSlider);
+        new GhostText(txtTiempoEspera, "Numero de...");
+//
+//        this.panelSlider = slider.getBasePanel();
+//        
+//        jPanel7.getInsets(new Insets(0, 0, 0, 0));
+//        jPanel14.getInsets(new Insets(0, 0, 0, 0));
+//        jPanel15.getInsets(new Insets(0, 0, 0, 0));
+//
+//        slider.addComponent(this.jPanel7);
+//        slider.addComponent(this.jPanel14);
     }
 
     /**
@@ -27,21 +56,579 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 806, Short.MAX_VALUE)
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jPanel14 = new javax.swing.JPanel();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jPanel15 = new javax.swing.JPanel();
+        jRadioButton6 = new javax.swing.JRadioButton();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        jSplitPane1 = new javax.swing.JSplitPane();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        txtNombreMaterial = new javax.swing.JTextField();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        txtTiempoEspera = new javax.swing.JTextField();
+        rbtnHoras = new javax.swing.JRadioButton();
+        rbtnDias = new javax.swing.JRadioButton();
+        rbtnSemanas = new javax.swing.JRadioButton();
+        rbtnMeses = new javax.swing.JRadioButton();
+        rbtnAnios = new javax.swing.JRadioButton();
+        jLabel2 = new javax.swing.JLabel();
+        txtTotalMateriales = new javax.swing.JTextField();
+        panelSlider = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        cmbEstadoMaterial = new javax.swing.JComboBox();
+        btnRegistrar = new javax.swing.JButton();
+        jPanel16 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        txtCantidadEstimada = new javax.swing.JTextField();
+        chkUtilizaLote = new javax.swing.JCheckBox();
+        btnCancelar = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jPanel8 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel12 = new javax.swing.JPanel();
+        jPanel13 = new javax.swing.JPanel();
+        jLabel33 = new javax.swing.JLabel();
+        cmbBuscarParametros3 = new javax.swing.JComboBox();
+        jLabel34 = new javax.swing.JLabel();
+        cmbMostrarTodo3 = new javax.swing.JComboBox();
+        jButton8 = new javax.swing.JButton();
+        txtBusqueda3 = new javax.swing.JTextField();
+        btnEditar = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        btnReporte = new javax.swing.JButton();
+        btnReporte1 = new javax.swing.JButton();
+
+        jPanel14.setBackground(new java.awt.Color(102, 0, 255));
+        jPanel14.setLayout(new javax.swing.BoxLayout(jPanel14, javax.swing.BoxLayout.Y_AXIS));
+
+        jCheckBox1.setText("jCheckBox1");
+        jPanel14.add(jCheckBox1);
+
+        jPanel7.setBackground(new java.awt.Color(153, 255, 51));
+        jPanel7.setLayout(new javax.swing.BoxLayout(jPanel7, javax.swing.BoxLayout.Y_AXIS));
+
+        jLabel4.setText("jLabel4");
+        jPanel7.add(jLabel4);
+
+        jPanel15.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel15.setLayout(new javax.swing.BoxLayout(jPanel15, javax.swing.BoxLayout.Y_AXIS));
+
+        jRadioButton6.setText("jRadioButton6");
+        jPanel15.add(jRadioButton6);
+
+        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
+
+        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.Y_AXIS));
+
+        jSplitPane1.setDividerLocation(600);
+        jSplitPane1.setDividerSize(5);
+
+        jLabel1.setText("Nombre del Material:");
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Tiempo de Espera"));
+        jPanel5.setLayout(new java.awt.BorderLayout());
+
+        jPanel6.setLayout(new java.awt.GridLayout(1, 6));
+
+        txtTiempoEspera.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTiempoEsperaKeyTyped(evt);
+            }
+        });
+        jPanel6.add(txtTiempoEspera);
+
+        buttonGroup1.add(rbtnHoras);
+        rbtnHoras.setText("Horas");
+        jPanel6.add(rbtnHoras);
+
+        buttonGroup1.add(rbtnDias);
+        rbtnDias.setText("Dias");
+        jPanel6.add(rbtnDias);
+
+        buttonGroup1.add(rbtnSemanas);
+        rbtnSemanas.setText("Semanas");
+        jPanel6.add(rbtnSemanas);
+
+        buttonGroup1.add(rbtnMeses);
+        rbtnMeses.setText("Meses");
+        jPanel6.add(rbtnMeses);
+
+        buttonGroup1.add(rbtnAnios);
+        rbtnAnios.setText("Años");
+        jPanel6.add(rbtnAnios);
+
+        jPanel5.add(jPanel6, java.awt.BorderLayout.CENTER);
+
+        jLabel2.setText("Materiales Registrados:");
+
+        txtTotalMateriales.setFocusable(false);
+        txtTotalMateriales.setOpaque(false);
+
+        panelSlider.setLayout(new java.awt.BorderLayout());
+
+        jLabel3.setText("Estado Material:");
+
+        cmbEstadoMaterial.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Disponible", "No Disponible" }));
+
+        btnRegistrar.setText("Registrar Material");
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarActionPerformed(evt);
+            }
+        });
+
+        jPanel16.setBorder(javax.swing.BorderFactory.createTitledBorder("Asignacion de Tamaño"));
+
+        jLabel5.setText("Cantidad Estimada:");
+
+        chkUtilizaLote.setText("Utiliza Lote");
+
+        javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
+        jPanel16.setLayout(jPanel16Layout);
+        jPanel16Layout.setHorizontalGroup(
+            jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel16Layout.createSequentialGroup()
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtCantidadEstimada, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(chkUtilizaLote)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 477, Short.MAX_VALUE)
+        jPanel16Layout.setVerticalGroup(
+            jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel16Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(chkUtilizaLote)
+                    .addComponent(txtCantidadEstimada, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
+                .addGap(14, 14, 14))
         );
+
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                            .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(txtNombreMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                            .addComponent(jLabel2)
+                            .addGap(2, 2, 2)
+                            .addComponent(txtTotalMateriales, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(panelSlider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbEstadoMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtTotalMateriales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtNombreMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(cmbEstadoMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
+                .addComponent(panelSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
+                    .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jSplitPane1.setLeftComponent(jPanel3);
+
+        jPanel4.setLayout(new java.awt.BorderLayout());
+
+        jButton1.setText("Visualizar Estructura de Materiales");
+        jPanel4.add(jButton1, java.awt.BorderLayout.PAGE_END);
+
+        jPanel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel8.setLayout(new java.awt.BorderLayout());
+        jPanel4.add(jPanel8, java.awt.BorderLayout.CENTER);
+
+        jSplitPane1.setRightComponent(jPanel4);
+
+        jPanel1.add(jSplitPane1);
+
+        jTabbedPane1.addTab("Administracion_Materiales", jPanel1);
+
+        jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.Y_AXIS));
+
+        jPanel13.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+
+        jLabel33.setText("Buscar por:");
+
+        cmbBuscarParametros3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Id", "Nombre Material", "Material/Dependiente", "Material/Independiente" }));
+
+        jLabel34.setText("Tipo de Busqueda:");
+
+        cmbMostrarTodo3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Mostrar Todo", "Mostrar Activos", "Mostrar Inactivos" }));
+
+        jButton8.setText("Aceptar");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+
+        txtBusqueda3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBusqueda3KeyReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
+        jPanel13.setLayout(jPanel13Layout);
+        jPanel13Layout.setHorizontalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel34)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cmbMostrarTodo3, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(55, 55, 55)
+                .addComponent(jLabel33)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cmbBuscarParametros3, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtBusqueda3, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel13Layout.setVerticalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel34)
+                    .addComponent(cmbMostrarTodo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton8)
+                    .addComponent(jLabel33)
+                    .addComponent(cmbBuscarParametros3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBusqueda3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        btnEditar.setText("Actualizar Material");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jTable1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                jTable1MouseMoved(evt);
+            }
+        });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(jTable1);
+
+        btnReporte.setText("Generar Reporte Material");
+        btnReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteActionPerformed(evt);
+            }
+        });
+
+        btnReporte1.setText("Generar Arbol Material");
+        btnReporte1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporte1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+        jPanel12.setLayout(jPanel12Layout);
+        jPanel12Layout.setHorizontalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3)
+                    .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnReporte1)
+                        .addGap(58, 58, 58)
+                        .addComponent(btnReporte)
+                        .addGap(56, 56, 56)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        jPanel12Layout.setVerticalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnReporte1, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                    .addComponent(btnReporte, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jPanel2.add(jPanel12);
+
+        jTabbedPane1.addTab("Busqueda Avanzada", jPanel2);
+
+        getContentPane().add(jTabbedPane1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void txtBusqueda3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusqueda3KeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBusqueda3KeyReleased
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void jTable1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseMoved
+        //        // TODO add your handling code here:
+        //        this.Id = Integer.parseInt(dtm.getValueAt(nf, 0).toString());
+
+    }//GEN-LAST:event_jTable1MouseMoved
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        this.btnEditar.setEnabled(true);
+        this.btnReporte.setEnabled(true);
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_btnReporteActionPerformed
+
+    private void btnReporte1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporte1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnReporte1ActionPerformed
+
+    public String RadioButtonSeleccionado(ButtonGroup buttonGroup) {
+        for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
+            AbstractButton button = buttons.nextElement();
+            if (button.isSelected()) {
+                return button.getText();
+            }
+        }
+        return null;
+    }
+
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        // TODO add your handling code here:
+        // slider.slideRight();
+        Materiales materiales = new Materiales();
+        boolean guardado;
+        if (!rbtnHoras.isSelected() && !rbtnDias.isSelected() && !rbtnSemanas.isSelected() && !rbtnMeses.isSelected() && !rbtnAnios.isSelected()) {
+            JOptionPane.showInternalMessageDialog(this, "Debe seleccionar al menus una opcion de tiempo", "Notificacion del Sistema", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        if (txtCantidadEstimada.getText().isEmpty() || txtTiempoEspera.getText().isEmpty() || txtNombreMaterial.getText().isEmpty()) {
+            JOptionPane.showInternalMessageDialog(this, "Porfavor no dejar campos vacios", "Notificacion del Sistema", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        if (chkUtilizaLote.isSelected()) {
+            materiales.setCantidad_material(Integer.parseInt(txtCantidadEstimada.getText()));
+            materiales.setCantidad_lote(Integer.parseInt(txtCantidadEstimada.getText()));
+        }
+        if (!chkUtilizaLote.isSelected()) {
+            materiales.setCantidad_material(Integer.parseInt(txtCantidadEstimada.getText()));
+            materiales.setCantidad_lote(0);
+        }
+        if (cmbEstadoMaterial.getSelectedItem().toString().equals("Disponible")) {
+            materiales.setEstado(true);
+        }
+        if (cmbEstadoMaterial.getSelectedItem().toString().equals("No Disponible")) {
+            materiales.setEstado(false);
+        }
+        materiales.setNombre_material(txtNombreMaterial.getText());
+        materiales.setTiempo_espera(txtTiempoEspera.getText() + " " + RadioButtonSeleccionado(buttonGroup1));
+        
+        guardado = RegistrarMaterial(materiales);
+        if (guardado) {
+            System.out.println("REGISTRADO");
+        }else{
+            System.out.println("nope");
+        }
+    }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private boolean RegistrarMaterial(Materiales materiales) {
+        
+        try {
+            Connection con = new Conexion().Coneccion();
+            CallableStatement comando = con.prepareCall("{call Registrar_Material(?,?,?,?,?)};");
+            comando.setString("nombre_material", materiales.getNombre_material());
+            comando.setString("tiempo_espera", materiales.getTiempo_espera());
+            comando.setInt("cantidad_lote", materiales.getCantidad_lote());
+            comando.setInt("cantidad_material", materiales.getCantidad_material());
+            comando.setBoolean("estado_material", materiales.isEstado());
+            comando.execute();
+            return true;
+        } catch (Exception ex) {
+            JOptionPane.showInternalMessageDialog(this, "Huston tenemos problemas en la BD", "Notificacion del Sistema", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+    private void txtTiempoEsperaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTiempoEsperaKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if (!Character.isDigit(c) && c != '.' || (c == '.' && txtTiempoEspera.getText().contains("."))) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtTiempoEsperaKeyTyped
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnRegistrar;
+    private javax.swing.JButton btnReporte;
+    private javax.swing.JButton btnReporte1;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JCheckBox chkUtilizaLote;
+    private javax.swing.JComboBox cmbBuscarParametros;
+    private javax.swing.JComboBox cmbBuscarParametros1;
+    private javax.swing.JComboBox cmbBuscarParametros2;
+    private javax.swing.JComboBox cmbBuscarParametros3;
+    private javax.swing.JComboBox cmbBusquedaTrabajador;
+    private javax.swing.JComboBox cmbBusquedaTrabajador1;
+    private javax.swing.JComboBox cmbBusquedaTrabajador2;
+    private javax.swing.JComboBox cmbEstadoMaterial;
+    private javax.swing.JComboBox cmbMostrarTodo;
+    private javax.swing.JComboBox cmbMostrarTodo1;
+    private javax.swing.JComboBox cmbMostrarTodo2;
+    private javax.swing.JComboBox cmbMostrarTodo3;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
+    private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JRadioButton jRadioButton6;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JPanel panelSlider;
+    private javax.swing.JRadioButton rbtnAnios;
+    private javax.swing.JRadioButton rbtnDias;
+    private javax.swing.JRadioButton rbtnHoras;
+    private javax.swing.JRadioButton rbtnMeses;
+    private javax.swing.JRadioButton rbtnSemanas;
+    private javax.swing.JTextField txtBusqueda;
+    private javax.swing.JTextField txtBusqueda1;
+    private javax.swing.JTextField txtBusqueda2;
+    private javax.swing.JTextField txtBusqueda3;
+    private javax.swing.JTextField txtCantidadEstimada;
+    private javax.swing.JTextField txtNombreMaterial;
+    private javax.swing.JTextField txtTiempoEspera;
+    private javax.swing.JTextField txtTotalMateriales;
     // End of variables declaration//GEN-END:variables
 }

@@ -10,5 +10,72 @@ package Pojo;
  * @author crdzbird
  */
 public class Materiales {
-    
+
+    private int id;
+    private String nombre_material;
+    private String tiempo_espera;
+    private int cantidad_lote;
+    private int cantidad_material;
+    private boolean estado;
+
+    public Materiales() {
+    }
+
+    public Materiales(int id, String nombre_material, String tiempo_espera, int cantidad_lote, int cantidad_material, boolean estado) {
+        this.id = id;
+        this.nombre_material = nombre_material;
+        this.tiempo_espera = tiempo_espera;
+        this.cantidad_lote = cantidad_lote;
+        this.cantidad_material = cantidad_material;
+        this.estado = estado;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNombre_material() {
+        return nombre_material;
+    }
+
+    public void setNombre_material(String nombre_material) {
+        this.nombre_material = nombre_material;
+    }
+
+    public String getTiempo_espera() {
+        return tiempo_espera;
+    }
+
+    public void setTiempo_espera(String tiempo_espera) {
+        this.tiempo_espera = tiempo_espera;
+    }
+
+    public int getCantidad_lote() {
+        return cantidad_lote;
+    }
+
+    public void setCantidad_lote(int cantidad_lote) {
+        this.cantidad_lote = cantidad_lote;
+    }
+
+    public int getCantidad_material() {
+        return cantidad_material;
+    }
+
+    public void setCantidad_material(int cantidad_material) {
+        this.cantidad_material = cantidad_material;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
 }

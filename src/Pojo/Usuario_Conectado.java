@@ -11,7 +11,7 @@ package Pojo;
  */
 public class Usuario_Conectado {
     
-    private static String User, Pass;
+    private static String User = "root", Pass = "lacb2208";
 
     public static String getUser() {
         return User;

@@ -9,8 +9,6 @@ import Pojo.Usuario_Conectado;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,13 +17,14 @@ import javax.swing.JOptionPane;
  */
 public class Conexion {
 
-    static String url = "jdbc:mysql://localhost/SistemaMRP," + Usuario_Conectado.getUser() + "," + Usuario_Conectado.getPass() + ";";
-
+    static String url = "jdbc:mysql://localhost:3306/SistemaMRP";
+    Connection connection;
+    
     public Connection Coneccion() {
-        Connection connection;
+        
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection(url);
+            connection = DriverManager.getConnection(url,Usuario_Conectado.getUser(),Usuario_Conectado.getPass());
             return connection;
         } catch (ClassNotFoundException | SQLException io) {
             JOptionPane.showMessageDialog(null, "Error al realizar coneccion a base de datos", "Error de Sistema", JOptionPane.ERROR_MESSAGE);
@@ -42,5 +41,5 @@ public class Conexion {
             JOptionPane.showMessageDialog(null, "Ha sido imposible cerrar la conexion", "Error de Sistema", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    
 }
