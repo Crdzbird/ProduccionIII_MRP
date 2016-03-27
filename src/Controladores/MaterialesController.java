@@ -140,12 +140,13 @@ public class MaterialesController {
             ResultSet rs = s.executeQuery("select * from VistaComposicion where id_principal = "+id_principal);
 
             while (rs.next()) {
-                Object [] obj = new Object[4];
+                Object [] obj = new Object[5];
                 
                 obj[0] = rs.getString(1);
                 obj[1] = rs.getString(2);
                 obj[2] = rs.getInt(3);
                 obj[3] = rs.getInt(4);
+                obj[4] = rs.getInt(5);
                 lista.add(obj);
             }
         } catch (SQLException ex) {

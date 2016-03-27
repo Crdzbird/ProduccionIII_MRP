@@ -34,7 +34,7 @@ public class Arbol_dependencia extends javax.swing.JInternalFrame {
     public void Cargar(int id) {
         MaterialesController m = new MaterialesController(); 
         
-        TextInBox root = new TextInBox(m.getById(id).getNombre_material(), 60, 60);
+        TextInBox root = new TextInBox(m.getById(id).getNombre_material(), 100, 30);
         DefaultTreeForTreeLayout<TextInBox> tree
                 = new DefaultTreeForTreeLayout<TextInBox>(root);
         
@@ -60,7 +60,7 @@ public class Arbol_dependencia extends javax.swing.JInternalFrame {
     public void AgregarDependencia(DefaultTreeForTreeLayout<TextInBox> tree, TextInBox root, int idPadre){
         MaterialesController m = new MaterialesController(); 
         for(Object [] obj : m.getDependencias(idPadre)){
-            TextInBox n = new TextInBox(obj[1].toString(), 60, 60);
+            TextInBox n = new TextInBox(obj[1].toString() + " ("+ obj[4]+")", 100, 30);
             tree.addChild(root, n);
             AgregarDependencia(tree, n, Integer.parseInt(obj[3].toString()));
         }
