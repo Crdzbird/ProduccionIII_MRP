@@ -6,25 +6,40 @@
 package Interfaces;
 
 import Conexion.Conexion;
+import Controladores.MaterialesController;
 import Implementaciones.GhostText;
 import Implementaciones.PanelSlider;
 import Pojo.Materiales;
+import static Validaciones.Metodos.limpiarTabla;
+import Validaciones.Validar;
 import java.awt.Insets;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author crdzbird
  */
 public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
+
+    DefaultTableModel dtm;
+    DefaultTableModel datos = new DefaultTableModel(){
+    
+        @Override
+        public boolean isCellEditable(int row, int column){
+            return false;
+        }
+    };
 
     //final PanelSlider<JPanel> slider;
     public Interfaz_GestionMateriales() {
@@ -33,18 +48,31 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
         this.txtCantidadEstimada.setTransferHandler(null);
         this.txtTiempoEspera.setTransferHandler(null);
         this.txtNombreMaterial.setTransferHandler(null);
-        this.txtTotalMateriales.setEditable(false);
 //        slider = new PanelSlider<>(this.panelSlider);
         new GhostText(txtTiempoEspera, "Numero de...");
-//
-//        this.panelSlider = slider.getBasePanel();
-//        
-//        jPanel7.getInsets(new Insets(0, 0, 0, 0));
-//        jPanel14.getInsets(new Insets(0, 0, 0, 0));
-//        jPanel15.getInsets(new Insets(0, 0, 0, 0));
-//
-//        slider.addComponent(this.jPanel7);
-//        slider.addComponent(this.jPanel14);
+        dtm = (DefaultTableModel) this.DependenciasTable.getModel();
+        this.DependenciasTable.setModel(dtm);
+        
+        
+        datos.addColumn("Id_material");
+        datos.addColumn("Nombre Material");
+        datos.addColumn("Cantidad inventario");
+        datos.addColumn("Tamaños de lotes");
+        datos.addColumn("Tiempo espera");
+        datos.addColumn("Perido espera");
+        datos.addColumn("Estado");
+        this.jTable1.setModel(datos);
+        
+        CargarMateriales();
+    }
+    
+    
+    public void CargarMateriales(){
+        MaterialesController mc= new MaterialesController();
+        for(Materiales m: mc.getAll()){
+            datos.addRow(new Object[]{m.getId(), m.getNombre_material(), m.getCantidad_material(),
+            m.getCantidad_lote(), m.getTiempo_espera(), m.getTipo_espera(),m.isEstado()?"Activo":"Inactivo"});
+        }
     }
 
     /**
@@ -77,17 +105,22 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
         rbtnSemanas = new javax.swing.JRadioButton();
         rbtnMeses = new javax.swing.JRadioButton();
         rbtnAnios = new javax.swing.JRadioButton();
-        jLabel2 = new javax.swing.JLabel();
-        txtTotalMateriales = new javax.swing.JTextField();
         panelSlider = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
         cmbEstadoMaterial = new javax.swing.JComboBox();
+        jLabel3 = new javax.swing.JLabel();
         btnRegistrar = new javax.swing.JButton();
         jPanel16 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         txtCantidadEstimada = new javax.swing.JTextField();
         chkUtilizaLote = new javax.swing.JCheckBox();
         btnCancelar = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        txtInventarioInicial = new javax.swing.JTextField();
+        jPanel9 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        DependenciasTable = new javax.swing.JTable();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
@@ -167,16 +200,31 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
 
         jPanel5.add(jPanel6, java.awt.BorderLayout.CENTER);
 
-        jLabel2.setText("Materiales Registrados:");
-
-        txtTotalMateriales.setFocusable(false);
-        txtTotalMateriales.setOpaque(false);
-
-        panelSlider.setLayout(new java.awt.BorderLayout());
+        cmbEstadoMaterial.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Disponible", "No Disponible" }));
+        cmbEstadoMaterial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbEstadoMaterialActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Estado Material:");
 
-        cmbEstadoMaterial.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Disponible", "No Disponible" }));
+        javax.swing.GroupLayout panelSliderLayout = new javax.swing.GroupLayout(panelSlider);
+        panelSlider.setLayout(panelSliderLayout);
+        panelSliderLayout.setHorizontalGroup(
+            panelSliderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSliderLayout.createSequentialGroup()
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cmbEstadoMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        panelSliderLayout.setVerticalGroup(
+            panelSliderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSliderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel3)
+                .addComponent(cmbEstadoMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
 
         btnRegistrar.setText("Registrar Material");
         btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
@@ -189,7 +237,19 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
 
         jLabel5.setText("Cantidad Estimada:");
 
+        txtCantidadEstimada.setEnabled(false);
+
         chkUtilizaLote.setText("Utiliza Lote");
+        chkUtilizaLote.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                chkUtilizaLoteStateChanged(evt);
+            }
+        });
+        chkUtilizaLote.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkUtilizaLoteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
@@ -221,73 +281,151 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel6.setText("Inventario inicial");
+
+        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Composicion"));
+
+        DependenciasTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Id_Material", "Nombre Material", "Cantidad"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(DependenciasTable);
+
+        jButton2.setText("Agregar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("Remover");
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                .addGap(0, 13, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 462, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)))
+                .addGap(20, 20, 20))
+        );
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                            .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtNombreMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                            .addComponent(jLabel2)
-                            .addGap(2, 2, 2)
-                            .addComponent(txtTotalMateriales, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(panelSlider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
+                        .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbEstadoMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtNombreMaterial, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
+                            .addComponent(txtInventarioInicial)))
+                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(10, 10, 10))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtTotalMateriales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31)
+                .addGap(15, 15, 15)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtNombreMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(cmbEstadoMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
-                .addComponent(panelSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
-                    .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel6)
+                    .addComponent(txtInventarioInicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(9, 9, 9)
+                .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(panelSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
         jSplitPane1.setLeftComponent(jPanel3);
 
-        jPanel4.setLayout(new java.awt.BorderLayout());
-
         jButton1.setText("Visualizar Estructura de Materiales");
-        jPanel4.add(jButton1, java.awt.BorderLayout.PAGE_END);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jPanel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel8.setLayout(new java.awt.BorderLayout());
-        jPanel4.add(jPanel8, java.awt.BorderLayout.CENTER);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(10, 10, 10))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
 
         jSplitPane1.setRightComponent(jPanel4);
 
@@ -336,7 +474,7 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cmbBuscarParametros3, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtBusqueda3, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+                .addComponent(txtBusqueda3, javax.swing.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel13Layout.setVerticalGroup(
@@ -418,7 +556,7 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -467,7 +605,19 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnReporteActionPerformed
 
     private void btnReporte1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporte1ActionPerformed
-        // TODO add your handling code here:
+        
+        int filas  = this.jTable1.getSelectedRow();
+        
+        if(filas  == -1){
+            JOptionPane.showInternalMessageDialog(this, "Seleccione un material primero porfavor" , "Error" ,JOptionPane.ERROR_MESSAGE );
+            return;
+        }
+        
+        int id = Integer.parseInt(this.jTable1.getValueAt(filas,0).toString());
+        
+        Arbol_dependencia arbol = new Arbol_dependencia(id);
+        this.getDesktopPane().add(arbol);
+        arbol.setVisible(true);
     }//GEN-LAST:event_btnReporte1ActionPerformed
 
     public String RadioButtonSeleccionado(ButtonGroup buttonGroup) {
@@ -489,51 +639,88 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
             JOptionPane.showInternalMessageDialog(this, "Debe seleccionar al menus una opcion de tiempo", "Notificacion del Sistema", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        if (txtCantidadEstimada.getText().isEmpty() || txtTiempoEspera.getText().isEmpty() || txtNombreMaterial.getText().isEmpty()) {
+        if (txtTiempoEspera.getText().isEmpty() || txtNombreMaterial.getText().isEmpty() || txtInventarioInicial.getText().isEmpty()) {
             JOptionPane.showInternalMessageDialog(this, "Porfavor no dejar campos vacios", "Notificacion del Sistema", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        if (chkUtilizaLote.isSelected()) {
-            materiales.setCantidad_material(Integer.parseInt(txtCantidadEstimada.getText()));
-            materiales.setCantidad_lote(Integer.parseInt(txtCantidadEstimada.getText()));
+
+        if (Validar.isInt(txtInventarioInicial.getText())) {
+            materiales.setCantidad_material(Integer.parseInt(txtInventarioInicial.getText()));
+        } else {
+            JOptionPane.showInternalMessageDialog(this, "Cantidad invalida en inventario incial", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
-        if (!chkUtilizaLote.isSelected()) {
-            materiales.setCantidad_material(Integer.parseInt(txtCantidadEstimada.getText()));
+
+        if (chkUtilizaLote.isSelected()) {
+            if (txtCantidadEstimada.getText().isEmpty()) {
+                JOptionPane.showInternalMessageDialog(this, "Porfavor digite la cantidad estimada de lote", "Notificacion del Sistema", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            } else {
+                materiales.setCantidad_lote(Integer.parseInt(txtCantidadEstimada.getText()));
+            }
+        } else {
             materiales.setCantidad_lote(0);
         }
+
         if (cmbEstadoMaterial.getSelectedItem().toString().equals("Disponible")) {
             materiales.setEstado(true);
-        }
-        if (cmbEstadoMaterial.getSelectedItem().toString().equals("No Disponible")) {
+        } else {
             materiales.setEstado(false);
         }
+
         materiales.setNombre_material(txtNombreMaterial.getText());
-        materiales.setTiempo_espera(txtTiempoEspera.getText() + " " + RadioButtonSeleccionado(buttonGroup1));
-        
-        guardado = RegistrarMaterial(materiales);
-        if (guardado) {
-            System.out.println("REGISTRADO");
-        }else{
-            System.out.println("nope");
+        materiales.setTiempo_espera(Integer.parseInt(txtTiempoEspera.getText()));
+        materiales.setTipo_espera(RadioButtonSeleccionado(buttonGroup1));
+
+        if (!this.ComposicionValida()) {
+            JOptionPane.showInternalMessageDialog(this, "Error en la tabla de composicion, \n"
+                    + "porfavor asegurese que en la columna de de Cantidad este correctamente digitada(numeros mayores a cero)");
+
+            return;
+        }
+
+        MaterialesController m = new MaterialesController();
+        int id = m.RegistrarMaterial(materiales);
+        if (id > 0) {
+            List<Object[]> lista = new ArrayList<>();
+            for (int i = 0; i < dtm.getRowCount(); i++) {
+                lista.add(new Object[]{dtm.getValueAt(i, 0), dtm.getValueAt(i, 2)});
+            }
+
+            guardado = m.RegistrarComposicion(lista, id);
+            if (guardado) {
+                this.chkUtilizaLote.setSelected(false);
+                this.txtNombreMaterial.setText(null);
+                this.txtTiempoEspera.setText(null);
+                this.cmbEstadoMaterial.setSelectedIndex(0);
+                this.txtInventarioInicial.setText(null);
+                for (Enumeration<AbstractButton> buttons = buttonGroup1.getElements(); buttons.hasMoreElements();) {
+                    AbstractButton button = buttons.nextElement();
+                    button.setSelected(false);
+                }
+                limpiarTabla(dtm);
+                JOptionPane.showInternalMessageDialog(this, "Guardado exitosamente", "Error", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } else {
+            JOptionPane.showInternalMessageDialog(this, "Error al guardar", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
-    private boolean RegistrarMaterial(Materiales materiales) {
-        
-        try {
-            Connection con = new Conexion().Coneccion();
-            CallableStatement comando = con.prepareCall("{call Registrar_Material(?,?,?,?,?)};");
-            comando.setString("nombre_material", materiales.getNombre_material());
-            comando.setString("tiempo_espera", materiales.getTiempo_espera());
-            comando.setInt("cantidad_lote", materiales.getCantidad_lote());
-            comando.setInt("cantidad_material", materiales.getCantidad_material());
-            comando.setBoolean("estado_material", materiales.isEstado());
-            comando.execute();
-            return true;
-        } catch (Exception ex) {
-            JOptionPane.showInternalMessageDialog(this, "Huston tenemos problemas en la BD", "Notificacion del Sistema", JOptionPane.ERROR_MESSAGE);
-            return false;
+    public boolean ComposicionValida() {
+        DefaultTableModel dtm = (DefaultTableModel) this.DependenciasTable.getModel();
+
+        for (int i = 0; i < dtm.getRowCount(); i++) {
+            if(dtm.getValueAt(i, 2) == null){
+                return false;
+            }
+            if (!Validar.isInt(dtm.getValueAt(i, 2).toString())) {
+
+                return false;
+            } else if (Integer.parseInt(dtm.getValueAt(i, 2).toString()) <= 0) {
+                return false;
+            }
         }
+        return true;
     }
 
     private void txtTiempoEsperaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTiempoEsperaKeyTyped
@@ -545,12 +732,38 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtTiempoEsperaKeyTyped
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private void chkUtilizaLoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkUtilizaLoteActionPerformed
+
+    }//GEN-LAST:event_chkUtilizaLoteActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void chkUtilizaLoteStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_chkUtilizaLoteStateChanged
+        if (chkUtilizaLote.isSelected()) {
+            this.txtCantidadEstimada.setEnabled(true);
+        } else {
+            this.txtCantidadEstimada.setEnabled(false);
+        }
+    }//GEN-LAST:event_chkUtilizaLoteStateChanged
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        Buscar_Material b = new Buscar_Material(this);
+        this.getDesktopPane().add(b);
+        b.setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void cmbEstadoMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEstadoMaterialActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbEstadoMaterialActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JTable DependenciasTable;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnRegistrar;
@@ -558,46 +771,22 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnReporte1;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox chkUtilizaLote;
-    private javax.swing.JComboBox cmbBuscarParametros;
-    private javax.swing.JComboBox cmbBuscarParametros1;
-    private javax.swing.JComboBox cmbBuscarParametros2;
     private javax.swing.JComboBox cmbBuscarParametros3;
-    private javax.swing.JComboBox cmbBusquedaTrabajador;
-    private javax.swing.JComboBox cmbBusquedaTrabajador1;
-    private javax.swing.JComboBox cmbBusquedaTrabajador2;
     private javax.swing.JComboBox cmbEstadoMaterial;
-    private javax.swing.JComboBox cmbMostrarTodo;
-    private javax.swing.JComboBox cmbMostrarTodo1;
-    private javax.swing.JComboBox cmbMostrarTodo2;
     private javax.swing.JComboBox cmbMostrarTodo3;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
-    private javax.swing.JLabel jLabel27;
-    private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel31;
-    private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
@@ -612,6 +801,7 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JRadioButton jRadioButton6;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
@@ -622,13 +812,10 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
     private javax.swing.JRadioButton rbtnHoras;
     private javax.swing.JRadioButton rbtnMeses;
     private javax.swing.JRadioButton rbtnSemanas;
-    private javax.swing.JTextField txtBusqueda;
-    private javax.swing.JTextField txtBusqueda1;
-    private javax.swing.JTextField txtBusqueda2;
     private javax.swing.JTextField txtBusqueda3;
     private javax.swing.JTextField txtCantidadEstimada;
+    private javax.swing.JTextField txtInventarioInicial;
     private javax.swing.JTextField txtNombreMaterial;
     private javax.swing.JTextField txtTiempoEspera;
-    private javax.swing.JTextField txtTotalMateriales;
     // End of variables declaration//GEN-END:variables
 }

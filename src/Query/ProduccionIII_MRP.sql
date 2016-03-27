@@ -4,32 +4,18 @@ Create Database SistemaMRP;
 
 Use SistemaMRP;
 
-/*Se supone que los materiales pueden estar compuestos por mas de 1, y que segun jeeson eso se debe componer xd */
-/* si ya entendi calma con eso dejame pensar*/
-
 -- mat , cant, tiempo | Mat, cant, tiempo
 -- table Mat ( nombre, cantidad inventario, tiempo, tam_lote, )
 -- table dependencia(idMatPrincipal, IdMat, Cantidad_M)(ya podes esrc
--- una duda, la tabla de dependencia ya esta, peeero no seria mejor ponerle un estado a esa misma tabla, para saber si 
--- todavia se utiliza, o si se puede reemplazar por algun otro material?, mmm (/*-*)/ \(*-*\), estoy viendo si el estado le corresponde a la tabla de material o la tabla de dependencia
--- es que la tabla materiales esta bien que se ponga el estado, para verificar si todavia esta vigente su utilizacion, pero si nos ponemos en la dependencia no se si seria buena idea,
--- creo que la misma tabla principal ya valida eso.accessible
--- yo se, que te refieres a eso, pero creo que las dostablas llevarian estado una
--- porsi ese material no se va utilizar en ningun otro producto
--- pero que tal si y, te voy a chat por messenger mucho se pega, dale descuida
--- esta lento este internet xd
--- a que te refieres exactamente con eso de desactivar estados?
 
 Create Table Materiales(
 	id_material int primary key auto_increment not null,
--- 	id_material_componente int,
 	nombre_material varchar(250)not null,
-	tiempo_espera varchar(50)not null,
+	tiempo_espera int not null,
+	tipo_espera varchar(20) not null,
 	cantidad_lote int not null,
--- 	cantidad_componente int,
 	cantidad_material int not null,
 	estado_material boolean default true
--- 	foreign key(id_material_componente)references Materiales(id_material)
 );
 
 Create Table Materiales_Dependencias(
@@ -126,11 +112,11 @@ End //
 -- 	cantidad_componente int,
 	cantidad_material int not null,
 	estado_material boolean default true*/
-
-
+drop procedure Registrar_Material;
 DELIMITER //
-Create Procedure Registrar_Material(
-nombre_material varchar(250),tiempo_espera varchar(50),cantidad_lote int,
+
+create Procedure Registrar_Material(
+nombre_material varchar(250),tiempo_espera int,tipo_espera varchar(20),cantidad_lote int,
 cantidad_material int,estado_material boolean)
 Begin
 DECLARE EXIT HANDLER FOR SQLEXCEPTION ROLLBACK;
@@ -139,14 +125,27 @@ Start Transaction;
 
 IF((Campos_Materiales_Vacio(nombre_material,tiempo_espera,cantidad_lote,cantidad_material)=1))
  THEN
-	insert into Materiales(nombre_material,tiempo_espera,cantidad_lote,cantidad_material,estado)
-    values(nombre_material,tiempo_espera,cantidad_lote,cantidad_material,estado_material);
+	insert into Materiales(nombre_material,tiempo_espera,tipo_espera,cantidad_lote,cantidad_material,estado_material)
+    values(nombre_material,tiempo_espera, tipo_espera,cantidad_lote,cantidad_material,estado_material);
 	Commit;
+
 else
 call raise_error;
 rollback;
 End If;
 End //
+
+
+delimiter //
+create Procedure Guardar_Material(
+nombre_material varchar(250),tiempo_espera int,tipo_espera varchar(20),cantidad_lote int,
+cantidad_material int,estado_material boolean, out salida int)
+Begin
+
+	insert into Materiales(nombre_material,tiempo_espera,tipo_espera,cantidad_lote,cantidad_material,estado_material)
+    values(nombre_material,tiempo_espera, tipo_espera,cantidad_lote,cantidad_material,estado_material);
+	select id_material into salida from Materiales order by id_material desc limit 1;
+end //
 /*
 id_material int primary key auto_increment not null,
 	id_material_componente int,

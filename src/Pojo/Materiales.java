@@ -13,15 +13,15 @@ public class Materiales {
 
     private int id;
     private String nombre_material;
-    private String tiempo_espera;
+    private int tiempo_espera;
     private int cantidad_lote;
     private int cantidad_material;
     private boolean estado;
-
+    private String tipo_espera;
     public Materiales() {
     }
 
-    public Materiales(int id, String nombre_material, String tiempo_espera, int cantidad_lote, int cantidad_material, boolean estado) {
+    public Materiales(int id, String nombre_material, int tiempo_espera, int cantidad_lote, int cantidad_material, boolean estado) {
         this.id = id;
         this.nombre_material = nombre_material;
         this.tiempo_espera = tiempo_espera;
@@ -29,7 +29,7 @@ public class Materiales {
         this.cantidad_material = cantidad_material;
         this.estado = estado;
     }
-
+    
     public int getId() {
         return id;
     }
@@ -46,11 +46,11 @@ public class Materiales {
         this.nombre_material = nombre_material;
     }
 
-    public String getTiempo_espera() {
+    public int getTiempo_espera() {
         return tiempo_espera;
     }
 
-    public void setTiempo_espera(String tiempo_espera) {
+    public void setTiempo_espera(int tiempo_espera) {
         this.tiempo_espera = tiempo_espera;
     }
 
@@ -78,4 +78,13 @@ public class Materiales {
         this.estado = estado;
     }
 
+    public String getTipo_espera() {
+        return tipo_espera;
+    }
+
+    public void setTipo_espera(String tipo_espera) {
+        this.tipo_espera = tipo_espera;
+    }
+
+    
 }
