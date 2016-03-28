@@ -44,7 +44,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     JPanel panelProveedores = new JPanel();
     JPanel panelInformacionGeneral = new JPanel();
     JButton btnGestionarMateriales = new JButton();
-    JButton btnArbolMaterial = new JButton();
+    JButton btnAdministrarEnvios = new JButton();
     JButton btnVisualizarMateriales_Composicion = new JButton();
     JButton btnGestionarProveedores = new JButton();
     JButton btnVisualizarProveedores = new JButton();
@@ -69,7 +69,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         panelInformacionGeneral.setLayout(new GridLayout(2, 1));
 
         btnGestionarMateriales.setText("Administrar Materiales");
-        btnArbolMaterial.setText("Arbol de Materiales");
+        btnAdministrarEnvios.setText("Envio de Materiales");
         btnVisualizarMateriales_Composicion.setText("Visualizar Composicion Mat.");
         btnGestionarProveedores.setText("Administrar Proveedores");
         btnVisualizarProveedores.setText("Visualizar Proveedores");
@@ -90,10 +90,34 @@ public class InterfazPrincipal extends javax.swing.JFrame {
             }
         });
 
-        panelMateriales.add(btnGestionarMateriales);
-        panelMateriales.add(btnArbolMaterial);
-        panelMateriales.add(btnVisualizarMateriales_Composicion);
+        btnGestionarProveedores.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Gestionar_Proveedores a = new Gestionar_Proveedores();
+                if (internalActivo(a)) {
+                    Centrar(a, Escritorio);
+                    try {
+                        Maximizar(a);
+                    } catch (PropertyVetoException ex) {
+                        Logger.getLogger(InterfazPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
 
+        btnAdministrarEnvios.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                 VerificacionProveedor a = new VerificacionProveedor();
+                if (internalActivo(a)) {
+                    Centrar(a, Escritorio);
+                }
+            }
+        });
+
+        panelMateriales.add(btnGestionarMateriales);
+        panelMateriales.add(btnAdministrarEnvios);
+        panelMateriales.add(btnVisualizarMateriales_Composicion);
         panelProveedores.add(btnGestionarProveedores);
         panelProveedores.add(btnVisualizarProveedores);
 

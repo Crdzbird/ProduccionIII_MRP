@@ -26,7 +26,7 @@ public class prueba_arbol extends javax.swing.JFrame {
     public prueba_arbol(int id) {
         initComponents();
         this.setLayout(new BorderLayout());
-        Cargar(id);
+        Cargar(2);
     }
 
     public void Cargar(int id) {

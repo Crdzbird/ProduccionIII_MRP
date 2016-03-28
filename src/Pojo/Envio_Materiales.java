@@ -5,7 +5,8 @@
  */
 package Pojo;
 
-import java.util.Date;
+import java.sql.Date;
+
 
 /**
  *
@@ -13,7 +14,7 @@ import java.util.Date;
  */
 public class Envio_Materiales {
 
-    private int id_envio;
+    private int id_envio,id_proveedor;
     private int id_material;
     private Date fecha_entrega;
     private Date fecha_solicitud;
@@ -22,8 +23,9 @@ public class Envio_Materiales {
     public Envio_Materiales() {
     }
 
-    public Envio_Materiales(int id_envio, int id_material, Date fecha_entrega, Date fecha_solicitud, int cantidad_solicitada) {
+    public Envio_Materiales(int id_envio, int id_proveedor, int id_material, Date fecha_entrega, Date fecha_solicitud, int cantidad_solicitada) {
         this.id_envio = id_envio;
+        this.id_proveedor = id_proveedor;
         this.id_material = id_material;
         this.fecha_entrega = fecha_entrega;
         this.fecha_solicitud = fecha_solicitud;
@@ -36,6 +38,14 @@ public class Envio_Materiales {
 
     public void setId_envio(int id_envio) {
         this.id_envio = id_envio;
+    }
+
+    public int getId_proveedor() {
+        return id_proveedor;
+    }
+
+    public void setId_proveedor(int id_proveedor) {
+        this.id_proveedor = id_proveedor;
     }
 
     public int getId_material() {
@@ -70,4 +80,6 @@ public class Envio_Materiales {
         this.cantidad_solicitada = cantidad_solicitada;
     }
 
+    
+    
 }

@@ -3,10 +3,7 @@ Drop Database SistemaMRP;
 Create Database SistemaMRP;
 
 Use SistemaMRP;
-
--- mat , cant, tiempo | Mat, cant, tiempo
--- table Mat ( nombre, cantidad inventario, tiempo, tam_lote, )
--- table dependencia(idMatPrincipal, IdMat, Cantidad_M)(ya podes esrc
+Select * from Proveedor;
 
 Create Table Materiales(
 	id_material int primary key auto_increment not null,
@@ -30,10 +27,14 @@ Create Table Materiales_Dependencias(
 
 Create Table Proveedor(
 	id_proveedor int primary key auto_increment not null,
-	nombre_proveedor varchar(250)not null,
-	estado_proveedor boolean default true
+	nombre varchar(100)not null,
+	apellido varchar(100)not null,
+	direccion varchar(250)not null,
+	telefono char(8)not null,
+	correo_electronico varchar(100)not null,
+	estado_proveedor boolean default true,
+	check(telefono like '[0-9]''[0-9]''[0-9]''[0-9]''[0-9]''[0-9]''[0-9]''[0-9]')
 );
-
 
 Create Table Estado_Envio(
 	id_estado_envio int primary key auto_increment not null,
@@ -47,7 +48,7 @@ Create Table Estado_Envio(
 );
 
 /* DESARROLLO DE FUNCIONES DE VERIFICACION DE MATERIALES Y FECHA */
-
+/*
 DELIMITER //
 CREATE FUNCTION Campos_Materiales_Vacio(nombre_material varchar(50),tiempo_espera varchar(50),cantidad_lote int,cantidad_material int)RETURNS INT
 BEGIN
@@ -72,9 +73,9 @@ set fecha_valida = 1;
 end if; 
 RETURN tp; 
 END //
-
+*/
 /* DESARROLLO DE TRIGGERS PARA VALIDAR REGISTRO UNICO DE PRODUCTO, PROVEEDOR Y ESTADO DE ENVIOS */
-
+/*
 DELIMITER //
 Create Trigger tr_verificar_materiales Before insert on Materiales
 For Each Row Begin
@@ -102,7 +103,7 @@ SET MESSAGE_TEXT = "La fecha de entrega no puede ser menor o igual a la fecha ac
   END IF;
 End //
 
-
+*/
 /* DESARROLLO DE PROCEDIMIENTOS DE ALMACENADO */
 /*id_material int primary key auto_increment not null,
 -- 	id_material_componente int,
@@ -112,9 +113,9 @@ End //
 -- 	cantidad_componente int,
 	cantidad_material int not null,
 	estado_material boolean default true*/
-drop procedure Registrar_Material;
-DELIMITER //
-
+-- drop procedure Registrar_Material;
+-- DELIMITER //
+/*
 create Procedure Registrar_Material(
 nombre_material varchar(250),tiempo_espera int,tipo_espera varchar(20),cantidad_lote int,
 cantidad_material int,estado_material boolean)
@@ -134,7 +135,7 @@ call raise_error;
 rollback;
 End If;
 End //
-
+*/
 
 delimiter //
 create Procedure Guardar_Material(
@@ -146,16 +147,29 @@ Begin
     values(nombre_material,tiempo_espera, tipo_espera,cantidad_lote,cantidad_material,estado_material);
 	select id_material into salida from Materiales order by id_material desc limit 1;
 end //
+
+delimiter //
+create Procedure Guardar_Proveedor(
+nombre_proveedor varchar(100),apellido_proveedor varchar(100),direccion varchar(250),telefono char(8),
+correo_electronico varchar(100),estado_proveedor boolean, out salida int)
+Begin
+
+	insert into Proveedor(nombre,apellido,direccion,telefono,correo_electronico,estado_proveedor)
+    values(nombre_proveedor,apellido_proveedor, direccion,telefono,correo_electronico,estado_proveedor);
+	select id_proveedor into salida from Proveedor order by id_proveedor desc limit 1;
+end //
+
+delimiter //
+create Procedure Guardar_Envio(
+id_proveedor int,id_material int,fecha_entrega datetime,fecha_solicitud datetime,
+cantidad_solicitada int, out salida int)
+Begin
+
+	insert into Estado_Envio(id_proveedor,id_material,fecha_entrega,fecha_solicitud,cantidad_solicitada)
+    values(id_proveedor,id_material,fecha_entrega,fecha_solicitud,cantidad_solicitada);
+	select id_estado_envio into salida from Estado_Envio order by id_estado_envio desc limit 1;
+end //
 /*
-id_material int primary key auto_increment not null,
-	id_material_componente int,
-	nombre_material varchar(250)not null,
-	tiempo_espera varchar(50)not null,
-	cantidad_lote int not null,
-	cantidad_componente int,
-	cantidad_material int not null,
-	estado_material boolean default true,
-*/
 DELIMITER //
 Create Procedure Alterar_Material(
 idMaterialBuscado int,nombre_Material varchar(50),tiempo_espera varchar(50),cantidad_lote int,cantidad_componente int, cantidad_material int,estado boolean)
@@ -167,24 +181,13 @@ SIGNAL SQLSTATE '45000'
 SET MESSAGE_TEXT = "El registro que desea modificar no existe...";
 End if;
 End //
-
-DELIMITER //
-Create Procedure BuscarMedico(
-parametro_Buscado varchar(200))
-Begin
-if(parametro_Buscado IS NULL or parametro_Buscado = '')then
-SIGNAL SQLSTATE '45000' 
-SET MESSAGE_TEXT = "Campo de Busqueda Vacio";
-else
-Select m.id_medico,m.fecha_registro,m.nombres,m.apellidos,m.Direccion,m.email,m.telefono,m.genero,m.estadociviil,m.foto,e.nombreEspecialidad from Medico m
-Inner Join Especialidad e
-on e.id_especialidad = m.id_especialidad
-Where id_medico = cast(parametro_Buscado as unsigned) OR
- fecha_registro like CONCAT('%', parametro_Buscado , '%') OR nombres like CONCAT('%', parametro_Buscado , '%') OR apellidos like CONCAT('%', parametro_Buscado , '%') OR Direccion like CONCAT('%', parametro_Buscado , '%') OR
-email like CONCAT('%', parametro_Buscado , '%') OR telefono like CONCAT('%', parametro_Buscado , '%') OR genero like CONCAT('%', parametro_Buscado , '%') OR estadociviil like CONCAT('%', parametro_Buscado , '%') OR nombreEspecialidad like CONCAT('%', parametro_Buscado , '%');
-end if;
-End //
-
-DELIMITER //
-Create Event Actualizar_Estado_Envio
-End //
+*/
+create VIEW VistaComposicion AS (
+SELECT M2.nombre_material AS 'Principal', M.nombre_material AS 'Dependencia', 
+M2.id_material AS 'id_principal', M.id_material AS 'id_dependencia', MD.cantidad_material_dependencia
+FROM Materiales_Dependencias MD
+INNER JOIN Materiales M
+ON M.id_material = MD.id_material_dependencia
+INNER JOIN Materiales M2
+ON M2.id_material = MD.id_material_principal
+);

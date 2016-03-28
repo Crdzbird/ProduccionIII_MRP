@@ -8,6 +8,8 @@ package Interfaces;
 import Controladores.MaterialesController;
 import Pojo.Materiales;
 import static Validaciones.Metodos.limpiarTabla;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -29,7 +31,6 @@ public class Buscar_Material extends javax.swing.JInternalFrame {
         for (Materiales m : new MaterialesController().getAll()) {
             ((DefaultTableModel) this.jTable1.getModel()).addRow(new Object[]{m.getId(), m.getNombre_material()});
         }
-
     }
 
     @SuppressWarnings("unchecked")

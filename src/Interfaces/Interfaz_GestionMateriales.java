@@ -5,26 +5,31 @@
  */
 package Interfaces;
 
-import Conexion.Conexion;
 import Controladores.MaterialesController;
+import DiagramaArbol.NodeTreePane;
+import DiagramaArbol.Nodos;
+import DiagramaArbol.RastrearArbol;
+import DiagramaArbol.TreeNodeExtendProvider;
 import Implementaciones.GhostText;
-import Implementaciones.PanelSlider;
 import Pojo.Materiales;
 import static Validaciones.Metodos.limpiarTabla;
 import Validaciones.Validar;
-import java.awt.Insets;
-import java.sql.CallableStatement;
-import java.sql.Connection;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.GridBagLayout;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
-import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
+import org.abego.treelayout.TreeForTreeLayout;
+import org.abego.treelayout.TreeLayout;
+import org.abego.treelayout.util.DefaultConfiguration;
+import org.abego.treelayout.util.DefaultTreeForTreeLayout;
 
 /**
  *
@@ -33,10 +38,10 @@ import javax.swing.table.DefaultTableModel;
 public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
 
     DefaultTableModel dtm;
-    DefaultTableModel datos = new DefaultTableModel(){
-    
+    DefaultTableModel datos = new DefaultTableModel() {
+
         @Override
-        public boolean isCellEditable(int row, int column){
+        public boolean isCellEditable(int row, int column) {
             return false;
         }
     };
@@ -44,6 +49,7 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
     //final PanelSlider<JPanel> slider;
     public Interfaz_GestionMateriales() {
         initComponents();
+        RastrearArbol tracker = new RastrearArbol();
         this.txtTiempoEspera.setTransferHandler(null);
         this.txtCantidadEstimada.setTransferHandler(null);
         this.txtTiempoEspera.setTransferHandler(null);
@@ -52,8 +58,7 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
         new GhostText(txtTiempoEspera, "Numero de...");
         dtm = (DefaultTableModel) this.DependenciasTable.getModel();
         this.DependenciasTable.setModel(dtm);
-        
-        
+
         datos.addColumn("Id_material");
         datos.addColumn("Nombre Material");
         datos.addColumn("Cantidad inventario");
@@ -62,16 +67,15 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
         datos.addColumn("Perido espera");
         datos.addColumn("Estado");
         this.jTable1.setModel(datos);
-        
+
         CargarMateriales();
     }
-    
-    
-    public void CargarMateriales(){
-        MaterialesController mc= new MaterialesController();
-        for(Materiales m: mc.getAll()){
+
+    public void CargarMateriales() {
+        MaterialesController mc = new MaterialesController();
+        for (Materiales m : mc.getAll()) {
             datos.addRow(new Object[]{m.getId(), m.getNombre_material(), m.getCantidad_material(),
-            m.getCantidad_lote(), m.getTiempo_espera(), m.getTipo_espera(),m.isEstado()?"Activo":"Inactivo"});
+                m.getCantidad_lote(), m.getTiempo_espera(), m.getTipo_espera(), m.isEstado() ? "Activo" : "Inactivo"});
         }
     }
 
@@ -157,6 +161,11 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
         jRadioButton6.setText("jRadioButton6");
         jPanel15.add(jRadioButton6);
 
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
+        setTitle("Control de Materiales");
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
         jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.Y_AXIS));
@@ -318,6 +327,11 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
         });
 
         jButton3.setText("Remover");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -351,8 +365,8 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(btnRegistrar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -388,7 +402,7 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(panelSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -404,24 +418,20 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
             }
         });
 
-        jPanel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel8.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Preview Composicion"), new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true)));
         jPanel8.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(10, 10, 10))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 454, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
+                .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -474,7 +484,7 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cmbBuscarParametros3, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtBusqueda3, javax.swing.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE)
+                .addComponent(txtBusqueda3, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel13Layout.setVerticalGroup(
@@ -605,16 +615,16 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnReporteActionPerformed
 
     private void btnReporte1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporte1ActionPerformed
-        
-        int filas  = this.jTable1.getSelectedRow();
-        
-        if(filas  == -1){
-            JOptionPane.showInternalMessageDialog(this, "Seleccione un material primero porfavor" , "Error" ,JOptionPane.ERROR_MESSAGE );
+
+        int filas = this.jTable1.getSelectedRow();
+
+        if (filas == -1) {
+            JOptionPane.showInternalMessageDialog(this, "Seleccione un material primero porfavor", "Notificacion del Sistema", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
-        int id = Integer.parseInt(this.jTable1.getValueAt(filas,0).toString());
-        
+
+        int id = Integer.parseInt(this.jTable1.getValueAt(filas, 0).toString());
+
         Arbol_dependencia arbol = new Arbol_dependencia(id);
         this.getDesktopPane().add(arbol);
         arbol.setVisible(true);
@@ -689,6 +699,13 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
 
             guardado = m.RegistrarComposicion(lista, id);
             if (guardado) {
+                Nodos root = new Nodos(Integer.toString(id) + ") " + " Material: " + materiales.getNombre_material(),"", "Envio: " + materiales.getTiempo_espera() + " " + materiales.getTipo_espera(), "Inventario: " + materiales.getCantidad_material(), "Maximo de lote: " + materiales.getCantidad_lote(), id, "");
+                setDefaultTree(new DefaultTreeForTreeLayout<>(root));
+                lastPreviewdTree = getDefaultTree();
+
+                updatefLastPreviewed();
+                displayTree(getDefaultTree());
+
                 this.chkUtilizaLote.setSelected(false);
                 this.txtNombreMaterial.setText(null);
                 this.txtTiempoEspera.setText(null);
@@ -699,10 +716,10 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
                     button.setSelected(false);
                 }
                 limpiarTabla(dtm);
-                JOptionPane.showInternalMessageDialog(this, "Guardado exitosamente", "Error", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showInternalMessageDialog(this, "Guardado exitosamente", "Notificacion del Sistema", JOptionPane.INFORMATION_MESSAGE);
             }
         } else {
-            JOptionPane.showInternalMessageDialog(this, "Error al guardar", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showInternalMessageDialog(this, "Error al guardar", "Notificacion del Sistema", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
@@ -710,7 +727,7 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
         DefaultTableModel dtm = (DefaultTableModel) this.DependenciasTable.getModel();
 
         for (int i = 0; i < dtm.getRowCount(); i++) {
-            if(dtm.getValueAt(i, 2) == null){
+            if (dtm.getValueAt(i, 2) == null) {
                 return false;
             }
             if (!Validar.isInt(dtm.getValueAt(i, 2).toString())) {
@@ -761,7 +778,129 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbEstadoMaterialActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        int fila = jTable1.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "No ha seleccionado un atributo", "Notificacion del Sistema", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        dtm.removeRow(fila);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
+    public static FontMetrics returnFontMetrics() {
+        Font font = new Font("SansSerif", Font.PLAIN, 11);
+        BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+        FontMetrics fm = img.getGraphics().getFontMetrics(font);
+        return fm;
+    }
+
+    DefaultTreeForTreeLayout<Nodos> getDefaultTree() {
+        return defaultTree;
+    }
+
+    void setDefaultTree(DefaultTreeForTreeLayout<Nodos> defaultTree) {
+        this.defaultTree = defaultTree;
+    }
+
+    void updatefLastPreviewed() {
+        if (lastPreviewdTree != null) {
+            previewNode(lastPreviewdTree, jPanel8);
+        }
+    }
+    
+    private void previewNode(DefaultTreeForTreeLayout<Nodos> defaultTree, JPanel previewPanel) {
+        TreeForTreeLayout<Nodos> tree = defaultTree;
+
+        double gapBetweenLevels = 50;
+        double gapBetweenNodes = 10;
+
+        DefaultConfiguration<Nodos> configuration = new DefaultConfiguration<>(
+                gapBetweenLevels, gapBetweenNodes);
+        // create the NodeExtentProvider for Node nodes
+        TreeNodeExtendProvider nodeExtentProvider = new TreeNodeExtendProvider();
+
+        // create the layout
+        TreeLayout<Nodos> treeLayout = new TreeLayout<>(tree,
+                nodeExtentProvider, configuration);
+
+        // Create a panel that draws the nodes and edges and show the panel
+        NodeTreePane panel = new NodeTreePane(treeLayout);
+
+        previewPanel.removeAll();
+        //previewPanel.setLayout(new GridBagLayout());
+        panel.setFont(returnFontMetrics().getFont());
+ 
+        previewPanel.setLayout(new GridBagLayout());
+
+        previewPanel.add(panel);
+        previewPanel.revalidate();
+        previewPanel.repaint();
+        //this.pack();
+    }
+    
+    void displayTree(DefaultTreeForTreeLayout<Nodos> defaultTree) {
+        TreeForTreeLayout<Nodos> tree = defaultTree;
+
+        double gapBetweenLevels = 50;
+        double gapBetweenNodes = 10;
+
+        DefaultConfiguration<Nodos> configuration = new DefaultConfiguration<>(
+                gapBetweenLevels, gapBetweenNodes);
+        // create the NodeExtentProvider for Node nodes
+        TreeNodeExtendProvider nodeExtentProvider = new TreeNodeExtendProvider();
+
+        // create the layout
+        TreeLayout<Nodos> treeLayout = new TreeLayout<>(tree,
+                nodeExtentProvider, configuration);
+
+        // Create a panel that draws the nodes and edges and show the panelF
+        NodeTreePane panel = new NodeTreePane(treeLayout);
+
+       // showInDialog(panel);
+
+    }
+
+    void displayChildNode(){
+        
+        //Nodos newNode = new Nodos(Integer.toString(id) + , "" , "Material Precedente", , jTextArea1.getText(), id, timestamp);
+    }
+    
+//    private void showInDialog(JComponent panel) {
+//        final int PIXELS = 50;
+//        JDialog dialog = new JDialog();
+//        panel.setFont(returnFontMetrics().getFont());
+//        javax.swing.JScrollPane scroll = new javax.swing.JScrollPane(panel);
+//        Container contentPane = dialog.getContentPane();
+//        ((JComponent) contentPane).setBorder(BorderFactory.createEmptyBorder(
+//                10, 10, 10, 10));
+//        contentPane.add(scroll);
+//
+//        dialog.pack();
+//
+//        //get system's resolution
+//        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+//        int width = gd.getDisplayMode().getWidth() - PIXELS;
+//        int height = gd.getDisplayMode().getHeight() - PIXELS;
+//
+//        //With this code the Jdialog becomes scrollable when it gets very large
+//        Dimension dialogDim = dialog.getSize();
+//        if (dialogDim.height > height) {
+//            Dimension dim = new Dimension(dialogDim.width, height);
+//            dialog.setSize(dim);
+//        } else if (dialogDim.width > width) {
+//            Dimension dim = new Dimension(width, dialogDim.height);
+//            dialog.setSize(dim);
+//        }
+//
+//        dialog.setTitle("Tracking: " + getDefaultTree().getRoot().getCategory());
+//        dialog.setModal(true);
+//        dialog.setLocationRelativeTo(null);
+//        dialog.setVisible(true);
+//    }
+    
+    private DefaultTreeForTreeLayout<Nodos> lastPreviewdTree;
+    private DefaultTreeForTreeLayout<Nodos> defaultTree;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JTable DependenciasTable;
     private javax.swing.JButton btnCancelar;
