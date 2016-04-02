@@ -63,13 +63,12 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     }
 
     public final void RellenarPaneles() {
-        //AGREGACION DE BORDERLAYOUT A LOS PANELES
         panelMateriales.setLayout(new GridLayout(4, 1));
         panelProveedores.setLayout(new GridLayout(3, 1));
         panelInformacionGeneral.setLayout(new GridLayout(2, 1));
 
         btnGestionarMateriales.setText("Administrar Materiales");
-        btnArbolMaterial.setText("Arbol de Materiales");
+        btnArbolMaterial.setText("Orden de produccion");
         btnVisualizarMateriales_Composicion.setText("Visualizar Composicion Mat.");
         btnGestionarProveedores.setText("Administrar Proveedores");
         btnVisualizarProveedores.setText("Visualizar Proveedores");
@@ -88,6 +87,16 @@ public class InterfazPrincipal extends javax.swing.JFrame {
                     }
                 }
             }
+        });
+
+        btnArbolMaterial.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                RegistrarOrdenProduccion r = new RegistrarOrdenProduccion();
+                
+                Centrar(r, Escritorio);
+            }
+
         });
 
         panelMateriales.add(btnGestionarMateriales);

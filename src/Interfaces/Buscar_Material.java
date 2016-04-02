@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Interfaces;
 
 import Controladores.MaterialesController;
@@ -18,10 +13,24 @@ import javax.swing.table.DefaultTableModel;
 public class Buscar_Material extends javax.swing.JInternalFrame {
 
     Interfaz_GestionMateriales Gestor;
+    RegistrarOrdenProduccion rop;
+    RegistrarEntrada ra;
 
     public Buscar_Material(Interfaz_GestionMateriales Gestor) {
         initComponents();
         this.Gestor = Gestor;
+        Cargar();
+    }
+
+    public Buscar_Material(RegistrarOrdenProduccion rop) {
+        initComponents();
+        this.rop = rop;
+        Cargar();
+    }
+    
+    public Buscar_Material(RegistrarEntrada ra) {
+        initComponents();
+        this.ra = ra;
         Cargar();
     }
 
@@ -121,14 +130,30 @@ public class Buscar_Material extends javax.swing.JInternalFrame {
             JOptionPane.showInternalMessageDialog(this, "Debe seleccionar una fila primero", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
-        if(this.ContieneMaterial(((DefaultTableModel) Gestor.DependenciasTable.getModel()), Integer.parseInt(jTable1.getValueAt(fila, 0).toString()))){
-            JOptionPane.showInternalMessageDialog(this, "Ese material ya ha sido agregado" , "Error" , JOptionPane.ERROR_MESSAGE);
-            return;
+
+        if (Gestor != null) {
+            if (this.ContieneMaterial(((DefaultTableModel) Gestor.DependenciasTable.getModel()), Integer.parseInt(jTable1.getValueAt(fila, 0).toString()))) {
+                JOptionPane.showInternalMessageDialog(this, "Ese material ya ha sido agregado", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            Object[] o = new Object[]{this.jTable1.getValueAt(fila, 0), this.jTable1.getValueAt(fila, 1), null, "Activo"};
+            ((DefaultTableModel) Gestor.DependenciasTable.getModel()).addRow(o);
+            this.dispose();
+
         }
-        Object[] o = new Object[]{this.jTable1.getValueAt(fila, 0), this.jTable1.getValueAt(fila, 1)};
-        ((DefaultTableModel) Gestor.DependenciasTable.getModel()).addRow(o);
-        this.dispose();
+        if(rop !=null){
+            rop.idMaterial = Integer.parseInt(this.jTable1.getValueAt(fila, 0).toString());
+            rop.jTextField1.setText(this.jTable1.getValueAt(fila, 1).toString());
+            
+            this.dispose();
+        }
+        
+         if(ra !=null){
+            ra.idMaterial = Integer.parseInt(this.jTable1.getValueAt(fila, 0).toString());
+            ra.jTextField1.setText(this.jTable1.getValueAt(fila, 1).toString());
+            
+            this.dispose();
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
@@ -137,7 +162,7 @@ public class Buscar_Material extends javax.swing.JInternalFrame {
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
         String texto = this.jTextField1.getText();
-        limpiarTabla((DefaultTableModel)this.jTable1.getModel());
+        limpiarTabla((DefaultTableModel) this.jTable1.getModel());
         if (texto.trim().isEmpty()) {
             this.Cargar();
             return;
@@ -151,16 +176,13 @@ public class Buscar_Material extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jTextField1KeyReleased
 
-    
-    
-    public boolean ContieneMaterial(DefaultTableModel dtm , int id){
-        for(int  i = 0; i <dtm.getRowCount(); i++){
-            if(Integer.parseInt(dtm.getValueAt(i, 0).toString()) == id){
+    public boolean ContieneMaterial(DefaultTableModel dtm, int id) {
+        for (int i = 0; i < dtm.getRowCount(); i++) {
+            if (Integer.parseInt(dtm.getValueAt(i, 0).toString()) == id) {
                 return true;
             }
         }
-        
-        
+
         return false;
     }
 

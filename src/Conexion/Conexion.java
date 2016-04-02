@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
  */
 public class Conexion {
 
-    static String url = "jdbc:mysql://localhost:3306/SistemaMRP";
+    static String url = "jdbc:mysql://localhost:3306/ProduccionMRP";
     Connection connection;
     
     public Connection Coneccion() {
