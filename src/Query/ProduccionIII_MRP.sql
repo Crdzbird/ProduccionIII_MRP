@@ -81,7 +81,8 @@ cantidad_material int,estado_material boolean, id int)
 Begin
 
 	update Materiales m set m.nombre_material = nombre_material, m.tiempo_espera = tiempo_espera,
-		m.tipo_espera = tipo_espera, m.cantidad_lote = cantidad_lote, m.estado_material = estado_material
+		m.tipo_espera = tipo_espera, m.cantidad_lote = cantidad_lote, m.estado_material = estado_material,
+		m.cantidad_material = cantidad_material
 	where m.id_material = id;
 
 end //

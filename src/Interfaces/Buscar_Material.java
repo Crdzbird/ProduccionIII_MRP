@@ -4,6 +4,7 @@ import Controladores.MaterialesController;
 import Pojo.Materiales;
 import static Validaciones.Metodos.limpiarTabla;
 import javax.swing.JOptionPane;
+import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -35,6 +36,7 @@ public class Buscar_Material extends javax.swing.JInternalFrame {
     }
 
     public void Cargar() {
+        this.jTable1.setSelectionMode(SINGLE_SELECTION);
         for (Materiales m : new MaterialesController().getAll()) {
             ((DefaultTableModel) this.jTable1.getModel()).addRow(new Object[]{m.getId(), m.getNombre_material()});
         }
@@ -71,6 +73,7 @@ public class Buscar_Material extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
 
         jLabel1.setText("Buscar");

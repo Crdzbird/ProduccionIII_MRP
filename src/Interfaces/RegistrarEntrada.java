@@ -8,6 +8,8 @@ package Interfaces;
 import Controladores.MaterialesController;
 import Validaciones.Validar;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,6 +26,14 @@ public class RegistrarEntrada extends javax.swing.JInternalFrame {
     public RegistrarEntrada(int idOrden) {
         initComponents();
         this.idOrden = idOrden;
+        
+        this.Fecha.setMinSelectableDate(new Date());
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, cal.get(Calendar.YEAR));
+        cal.set(Calendar.MONTH, 12); // 11 = december
+        cal.set(Calendar.DAY_OF_MONTH, 31);
+        this.Fecha.setMaxSelectableDate(cal.getTime());
     }
 
     /**

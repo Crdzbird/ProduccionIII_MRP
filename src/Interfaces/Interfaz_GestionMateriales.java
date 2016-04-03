@@ -6,7 +6,6 @@ import Pojo.Materiales;
 import Validaciones.Metodos;
 import static Validaciones.Metodos.limpiarTabla;
 import Validaciones.Validar;
-import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -15,7 +14,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
+import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -37,14 +36,12 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
     int CantMaterialesActualizar = 0;
     int idActualizar = -1;
 
-    //final PanelSlider<JPanel> slider;
     public Interfaz_GestionMateriales() {
         initComponents();
         this.txtTiempoEspera.setTransferHandler(null);
         this.txtCantidadEstimada.setTransferHandler(null);
         this.txtTiempoEspera.setTransferHandler(null);
         this.txtNombreMaterial.setTransferHandler(null);
-//        slider = new PanelSlider<>(this.panelSlider);
         new GhostText(txtTiempoEspera, "Numero de...");
         dtm = (DefaultTableModel) this.DependenciasTable.getModel();
         this.DependenciasTable.setModel(dtm);
@@ -65,6 +62,13 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
 
         setViewColumn(0, false);
         CargarMateriales();
+        
+        this.jTable1.setSelectionMode(SINGLE_SELECTION);
+        this.DependenciasTable.setSelectionMode(SINGLE_SELECTION);
+        
+        this.txtCantidadEstimada.setTransferHandler(null);
+        this.txtInventarioInicial.setTransferHandler(null);
+        this.txtTiempoEspera.setTransferHandler(null);
 
     }
 
@@ -76,6 +80,7 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
     }
 
     public void CargarMateriales() {
+        limpiarTabla(datos);
         MaterialesController mc = new MaterialesController();
         for (Materiales m : mc.getAll()) {
             datos.addRow(new Object[]{m.getId(), m.getNombre_material(), m.getCantidad_material(),
@@ -237,6 +242,11 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
         jLabel5.setText("Cantidad Estimada:");
 
         txtCantidadEstimada.setEnabled(false);
+        txtCantidadEstimada.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadEstimadaKeyTyped(evt);
+            }
+        });
 
         chkUtilizaLote.setText("Utiliza Lote");
         chkUtilizaLote.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -282,6 +292,12 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
 
         jLabel6.setText("Inventario inicial");
 
+        txtInventarioInicial.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtInventarioInicialKeyTyped(evt);
+            }
+        });
+
         jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Composicion"));
 
         DependenciasTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -307,6 +323,7 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        DependenciasTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(DependenciasTable);
 
         jButton2.setText("Agregar");
@@ -510,6 +527,7 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
 
             }
         ));
+        jTable1.getTableHeader().setReorderingAllowed(false);
         jTable1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 jTable1MouseMoved(evt);
@@ -603,13 +621,11 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
         this.txtInventarioInicial.setText(String.valueOf(m.getCantidad_material()));
         this.txtTiempoEspera.setText(String.valueOf(m.getTiempo_espera()));
 
-       
-
         this.txtCantidadEstimada.setText(String.valueOf(m.getCantidad_lote()));
 
         for (Object[] obj : mc.getDependencias(m.getId())) {
             this.CantMaterialesActualizar++;
-            dtm.addRow(new Object[]{obj[3], obj[1], obj[4], (boolean)obj[5]?"Activo":"Inactivo"});
+            dtm.addRow(new Object[]{obj[3], obj[1], obj[4], (boolean) obj[5] ? "Activo" : "Inactivo"});
         }
 
         if (m.isEstado()) {
@@ -671,7 +687,7 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
         // slider.slideRight();
         Materiales materiales = new Materiales();
         boolean guardado;
-        
+
         if (txtTiempoEspera.getText().isEmpty() || txtNombreMaterial.getText().isEmpty() || txtInventarioInicial.getText().isEmpty()) {
             JOptionPane.showInternalMessageDialog(this, "Porfavor no dejar campos vacios", "Notificacion del Sistema", JOptionPane.INFORMATION_MESSAGE);
             return;
@@ -679,6 +695,7 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
 
         if (Validar.isInt(txtInventarioInicial.getText())) {
             materiales.setCantidad_material(Integer.parseInt(txtInventarioInicial.getText()));
+            
         } else {
             JOptionPane.showInternalMessageDialog(this, "Cantidad invalida en inventario incial", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -728,20 +745,19 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
                     this.txtTiempoEspera.setText(null);
                     this.cmbEstadoMaterial.setSelectedIndex(0);
                     this.txtInventarioInicial.setText(null);
-                    
+
                     limpiarTabla(dtm);
                     setViewColumn(0, false);
+                    this.CargarMateriales();
                     JOptionPane.showInternalMessageDialog(this, "Guardado exitosamente", "Error", JOptionPane.INFORMATION_MESSAGE);
                 }
             } else {
                 JOptionPane.showInternalMessageDialog(this, "Error al guardar", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }
-        else{
+        } else {
             materiales.setId(this.idActualizar);
             boolean actualizado = m.ActualizarMaterial(materiales);
-            
-            if(actualizado){
+            if (actualizado) {
 
                 List<Object[]> lista = new ArrayList<>();
                 for (int i = this.CantMaterialesActualizar; i < dtm.getRowCount(); i++) {
@@ -749,28 +765,33 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
                 }
 
                 guardado = m.RegistrarComposicion(lista, materiales.getId());
-                
-                for(int i = 0 ; i< this.CantMaterialesActualizar; i++){
+
+                for (int i = 0; i < this.CantMaterialesActualizar; i++) {
                     int iddep = Integer.parseInt(dtm.getValueAt(i, 0).toString());
-                    boolean a = m.ActualizarDependencia(materiales.getId(), iddep, 
-                            Integer.parseInt(dtm.getValueAt(i, 2).toString()), 
+                    boolean a = m.ActualizarDependencia(materiales.getId(), iddep,
+                            Integer.parseInt(dtm.getValueAt(i, 2).toString()),
                             dtm.getValueAt(i, 3).toString().equals("Activo"));
-                    
-                    if(!a){
+
+                    if (!a) {
                         System.out.println("no se pudo guardar");
                     }
                 }
-                
-                
+
+                this.chkUtilizaLote.setSelected(false);
+                this.txtNombreMaterial.setText(null);
+                this.txtTiempoEspera.setText(null);
+                this.cmbEstadoMaterial.setSelectedIndex(0);
+                this.txtInventarioInicial.setText(null);
                 idActualizar = -1;
-                this.CantMaterialesActualizar = 0 ;
+                this.CantMaterialesActualizar = 0;
                 this.idActualizar = -1;
                 Metodos.limpiarTabla(dtm);
                 this.setViewColumn(0, false);
-                JOptionPane.showInternalMessageDialog(this , "Actualizado exitosamente" , "Informacion" , JOptionPane.INFORMATION_MESSAGE);
-            
+                this.CargarMateriales();
+                JOptionPane.showInternalMessageDialog(this, "Actualizado exitosamente", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+
             }
-            
+
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
@@ -794,7 +815,8 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
     private void txtTiempoEsperaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTiempoEsperaKeyTyped
         // TODO add your handling code here:
         char c = evt.getKeyChar();
-        if (!Character.isDigit(c) && c != '.' || (c == '.' && txtTiempoEspera.getText().contains("."))) {
+        
+        if(!Character.isDigit(c)){
             evt.consume();
         }
     }//GEN-LAST:event_txtTiempoEsperaKeyTyped
@@ -831,12 +853,12 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         int fila = this.DependenciasTable.getSelectedRow();
-        
-        if(fila == -1){
+
+        if (fila == -1) {
             return;
         }
-        
-        if(fila + 1 > this.CantMaterialesActualizar){
+
+        if (fila + 1 > this.CantMaterialesActualizar) {
             dtm.removeRow(fila);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -844,6 +866,22 @@ public class Interfaz_GestionMateriales extends javax.swing.JInternalFrame {
     private void txtTiempoEsperaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTiempoEsperaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTiempoEsperaActionPerformed
+
+    private void txtInventarioInicialKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtInventarioInicialKeyTyped
+        char c = evt.getKeyChar();
+        
+        if(!Character.isDigit(c)){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtInventarioInicialKeyTyped
+
+    private void txtCantidadEstimadaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadEstimadaKeyTyped
+        char c = evt.getKeyChar();
+        
+        if(!Character.isDigit(c)){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtCantidadEstimadaKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

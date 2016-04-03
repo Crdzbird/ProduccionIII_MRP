@@ -69,6 +69,7 @@ public class SeleccionMetodo extends javax.swing.JInternalFrame {
                 break;}
         
         }
+        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
 

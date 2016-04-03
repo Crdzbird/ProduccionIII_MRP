@@ -2,10 +2,14 @@ package Interfaces;
 
 import Controladores.MaterialesController;
 import static Implementaciones.Metodos.Centrar;
+import static Validaciones.Metodos.limpiarTabla;
 import Validaciones.Validar;
 import java.awt.image.ImageObserver;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import javax.swing.JOptionPane;
+import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -19,9 +23,19 @@ public class RegistrarOrdenProduccion extends javax.swing.JInternalFrame {
     public RegistrarOrdenProduccion() {
         initComponents();
         Cargar();
+        this.jTable1.setSelectionMode(SINGLE_SELECTION);
+        this.txtCantidad.setTransferHandler(null);
+        this.Fecha.setMinSelectableDate(new Date());
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, cal.get(Calendar.YEAR));
+        cal.set(Calendar.MONTH, 12); // 11 = december
+        cal.set(Calendar.DAY_OF_MONTH, 31);
+        this.Fecha.setMaxSelectableDate(cal.getTime());
     }
 
     public void Cargar() {
+        limpiarTabla((DefaultTableModel) this.jTable1.getModel());
         MaterialesController m = new MaterialesController();
         for (Object[] obj : m.getOrdenes()) {
             ((DefaultTableModel) this.jTable1.getModel()).addRow(obj);
@@ -32,6 +46,7 @@ public class RegistrarOrdenProduccion extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jComboBox1 = new javax.swing.JComboBox<>();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
@@ -48,6 +63,8 @@ public class RegistrarOrdenProduccion extends javax.swing.JInternalFrame {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         setClosable(true);
         setIconifiable(true);
         setTitle("Registrar orden de produccion");
@@ -60,6 +77,12 @@ public class RegistrarOrdenProduccion extends javax.swing.JInternalFrame {
         });
 
         jLabel3.setText("Cantidad a producir");
+
+        txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadKeyTyped(evt);
+            }
+        });
 
         jButton2.setText("Guardar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -138,6 +161,7 @@ public class RegistrarOrdenProduccion extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
 
         jButton3.setText("Registrar entradas");
@@ -216,6 +240,7 @@ public class RegistrarOrdenProduccion extends javax.swing.JInternalFrame {
                 this.Fecha.setDate(null);
                 this.txtCantidad.setText(null);
                 this.jTextField1.setText(null);
+                this.Cargar();
             } else {
                 JOptionPane.showInternalMessageDialog(this, "No se pudo registrar la orden", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -263,6 +288,14 @@ public class RegistrarOrdenProduccion extends javax.swing.JInternalFrame {
         Centrar(s, this.getDesktopPane());
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
+        char c = evt.getKeyChar();
+
+        if (!Character.isDigit(c)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtCantidadKeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser Fecha;
@@ -270,6 +303,7 @@ public class RegistrarOrdenProduccion extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
