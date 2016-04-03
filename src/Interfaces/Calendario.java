@@ -184,8 +184,8 @@ public class Calendario extends javax.swing.JInternalFrame {
                 newCalendar.setTime(parsed);
 
                 int col = ColumnSemana(newCalendar.get(Calendar.WEEK_OF_YEAR));
-                
-                if(col <=2){
+
+                if (col <= 2) {
                     return;
                 }
                 int fila = getFilaMaterial(m.getById(Integer.parseInt(obj[1].toString())).getNombre_material());
@@ -270,6 +270,9 @@ public class Calendario extends javax.swing.JInternalFrame {
                         if (registro.length > 1) {
                             Necesidad = Integer.parseInt(registro[1]);
                         }
+
+                        InventarioInicial += Integer.parseInt(registro[0]);
+
                     } else if (nes == null) {
                         Necesidad = 0;
                     } else {

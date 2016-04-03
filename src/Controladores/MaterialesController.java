@@ -136,7 +136,32 @@ public class MaterialesController {
                     + "(IdMaterial,CantidadSolicitud,Fecha) "
                     + "values (%s,%s,'%s')", id, cantidad, fecha);
 
-            System.out.println("" + sql);
+            Statement comando = con.createStatement();
+            int filas = comando.executeUpdate(sql);
+
+            con.close();
+            if (filas > 0) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (Exception ex) {
+            System.out.println("" + ex);
+            return false;
+        }
+    }
+    
+    
+    public boolean ActualizarOrden(int idOrden , String fecha, int cantidad) {
+
+        try {
+            Connection con = new Conexion().Coneccion();
+
+            String sql = String.format("update OrdenProduccion "
+                    + "set Fecha = '%s', CantidadSolicitud = %s"
+                    + " where IdOrden = %s", fecha, cantidad, idOrden);
+
             Statement comando = con.createStatement();
             int filas = comando.executeUpdate(sql);
 
@@ -161,6 +186,32 @@ public class MaterialesController {
             String sql = String.format("insert into Entradas_Programadas "
                     + "(id_material,fecha_entrega,cantidad_solicitada, IdOrden) "
                     + "values (%s,'%s' , %s,%s)", id,  fecha, cantidad, idorden);
+
+            System.out.println("" + sql);
+            Statement comando = con.createStatement();
+            int filas = comando.executeUpdate(sql);
+
+            con.close();
+            if (filas > 0) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (Exception ex) {
+            System.out.println("" + ex);
+            return false;
+        }
+    }
+    
+    public boolean ActualizarEntrada(int id, String fecha, int cantidad) {
+
+        try {
+            Connection con = new Conexion().Coneccion();
+
+            String sql = String.format("update Entradas_Programadas "
+                    + "set fecha_entrega = '%s' ,cantidad_solicitada = %s "
+                    + "where id_entradas_programadas = %s",   fecha, cantidad, id);
 
             System.out.println("" + sql);
             Statement comando = con.createStatement();
@@ -321,6 +372,29 @@ public class MaterialesController {
             }
             
             return lista;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
+    
+    public Object[] getEntradasById(int idEntrada) {
+        Connection con = new Conexion().Coneccion();
+        
+        try {
+            Statement s = con.createStatement();
+            ResultSet rs = s.executeQuery("select * from Entradas_Programadas where id_entradas_programadas = " + idEntrada);
+
+            while (rs.next()) {
+                Object [] obj = new Object[5];
+                obj[0] = rs.getInt(1);
+                obj[1] = rs.getInt(2);
+                obj[2] = rs.getString(3);
+                obj[3] = rs.getInt(4);
+                obj[4] = rs.getInt(5);
+                return obj;
+            }
+            return null;
         } catch (SQLException ex) {
             return null;
         }
